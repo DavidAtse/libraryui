@@ -1,0 +1,107 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>{{ greeting }}, John 👋</h1>
+      <p>{{ todayLabel | date: 'd MMMM y' }} · Voici l'état d'avancement pour <strong>{{ service.team() }}</strong>.</p>
+    </div>
+    <button class="btn btn--primary" (click)="service.openCreate()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nouveau projet
+    </button>
+  </header>
+
+  <!-- KPI cards -->
+  <div class="kpis">
+    <app-stat-card label="Projets au total" [value]="stats().total" hint="Pour l'équipe sélectionnée" [spark]="[4,6,5,8,7,10,9]">
+      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    </app-stat-card>
+    <app-stat-card label="En cours" tone="warning" [value]="stats().active" hint="Travaux actuellement en cours" [spark]="[3,5,4,6,6,5,7]">
+      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </app-stat-card>
+    <app-stat-card label="Terminés" tone="success" [value]="stats().completed" hint="Livrés avec succès" [spark]="[1,2,2,3,4,4,6]">
+      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </app-stat-card>
+    <app-stat-card label="En retard" tone="danger" [value]="stats().delayed" hint="Nécessitent une attention" [spark]="[5,4,5,3,4,3,3]">
+      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </app-stat-card>
+  </div>
+
+  <div class="grid">
+    <!-- Weekly activity -->
+    <article class="panel panel--wide">
+      <header class="panel__head">
+        <div>
+          <h2>Activité hebdomadaire</h2>
+          <p>{{ weekTotal() }} tâches terminées cette semaine</p>
+        </div>
+        <span class="chip">Progression moyenne : {{ stats().avgProgress }}%</span>
+      </header>
+      <div class="bars" role="img" [attr.aria-label]="'Tâches terminées par jour : ' + weekTotal() + ' cette semaine'">
+        <div class="bars__col" *ngFor="let d of week(); let i = index">
+          <span class="bars__value">{{ d.value }}</span>
+          <div class="bars__track">
+            <div class="bars__bar" [style.height.%]="d.height" [style.animation-delay.ms]="i * 60"></div>
+          </div>
+          <span class="bars__day">{{ d.day }}</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Status breakdown -->
+    <article class="panel">
+      <header class="panel__head">
+        <div>
+          <h2>Répartition par statut</h2>
+          <p>{{ stats().total }} projets au total</p>
+        </div>
+      </header>
+      <div class="donut">
+        <svg viewBox="0 0 36 36" class="donut__chart" role="img" aria-label="Répartition des statuts de projet">
+          <circle cx="18" cy="18" r="15.915" class="donut__ring" />
+          <ng-container *ngFor="let s of donut()">
+            <circle *ngIf="s.value > 0" cx="18" cy="18" r="15.915" class="donut__seg"
+                    [attr.stroke]="s.color" [attr.stroke-dasharray]="s.dash" [attr.stroke-dashoffset]="s.offset" />
+          </ng-container>
+          <text x="18" y="19.5" class="donut__total">{{ stats().total }}</text>
+        </svg>
+        <ul class="legend">
+          <li *ngFor="let s of donut()">
+            <span class="legend__dot" [style.background]="s.color"></span>
+            <span class="legend__label">{{ s.label }}</span>
+            <strong>{{ s.value }}</strong>
+            <span class="legend__pct">{{ s.pct }}%</span>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Upcoming deadlines -->
+    <article class="panel panel--full">
+      <header class="panel__head">
+        <div>
+          <h2>Prochaines échéances</h2>
+          <p>Les 5 projets les plus urgents</p>
+        </div>
+        <a routerLink="/projects" class="link">Voir tous les projets →</a>
+      </header>
+      <ul class="deadlines" *ngIf="upcoming().length; else empty">
+        <li *ngFor="let p of upcoming()">
+          <div class="deadlines__main">
+            <strong>{{ p.name }}</strong>
+            <span>{{ p.owner }} · {{ p.team }}</span>
+          </div>
+          <div class="deadlines__progress" role="progressbar" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="p.name + ' progress'">
+            <div [style.width.%]="p.progress" [class.is-late]="p.status === 'En retard'"></div>
+          </div>
+          <span class="deadlines__pct">{{ p.progress }}%</span>
+          <span class="due" [class.due--late]="daysLeft(p.dueDate) < 0" [class.due--soon]="daysLeft(p.dueDate) >= 0 && daysLeft(p.dueDate) <= 7">
+            {{ p.dueDate | date: 'd MMM' }} · {{ dueLabel(p.dueDate) }}
+          </span>
+        </li>
+      </ul>
+      <ng-template #empty>
+        <p class="empty">Aucune échéance en attente. Tout est livré ! 🎉</p>
+      </ng-template>
+    </article>
+  </div>
+</section>

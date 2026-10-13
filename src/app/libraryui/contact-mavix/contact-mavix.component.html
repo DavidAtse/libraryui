@@ -1,0 +1,90 @@
+<!-- LibraryUI component: Contact Mavix (form) – adapted for Taskly support -->
+<section class="mv-contact">
+  <div class="mv-contact__inner">
+
+    <!-- Carte gauche : infos -->
+    <div class="mv-contact__info">
+      <span class="mv-contact__tag">Support</span>      <h2>Besoin d’aide pour<br>vos projets ?</h2>
+      <p>Une question sur votre espace de travail, une suggestion ou un problème à signaler ? Notre équipe vous répond sous 24h.</p>
+
+      <div class="mv-contact__details">
+        <div class="mv-contact__detail-item">
+          <div class="mv-contact__detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+          </div>
+          <div>
+            <div class="mv-contact__detail-label">Téléphone</div>
+            <div class="mv-contact__detail-value">+33 1 23 45 67 89</div>
+          </div>
+        </div>
+
+        <div class="mv-contact__detail-item">
+          <div class="mv-contact__detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div>
+            <div class="mv-contact__detail-label">Adresse e-mail</div>
+            <div class="mv-contact__detail-value">support&#64;taskly.app</div>
+          </div>
+        </div>
+
+        <div class="mv-contact__detail-item">
+          <div class="mv-contact__detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="mv-contact__detail-label">Adresse de nos bureaux</div>
+            <div class="mv-contact__detail-value">12 rue de la Paix,<br>75002 Paris – France</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right : form -->
+    <div class="mv-contact__form-wrap">
+      <span class="mv-contact__form-tag">Contactez-nous</span>
+      <h3>Envoyer un message</h3>
+      <p class="mv-contact__form-sub">Remplissez le formulaire ci-dessous, notre équipe vous répondra dans les plus brefs délais.</p>
+
+      <ng-container *ngIf="!sent">
+        <div class="mv-contact__row">
+          <div class="mv-contact__field">
+            <input class="mv-contact__input" type="text" [(ngModel)]="firstName" placeholder="Prénom *" aria-label="Prénom" autocomplete="given-name" />
+          </div>
+          <div class="mv-contact__field">
+            <input class="mv-contact__input" type="text" [(ngModel)]="lastName" placeholder="Nom" aria-label="Nom" autocomplete="family-name" />
+          </div>
+        </div>
+        <div class="mv-contact__row">
+          <div class="mv-contact__field">
+            <input class="mv-contact__input" type="email" [(ngModel)]="email" placeholder="E-mail *" aria-label="E-mail" autocomplete="email" />
+          </div>
+          <div class="mv-contact__field">
+            <input class="mv-contact__input" type="tel" [(ngModel)]="phone" placeholder="Téléphone" aria-label="Téléphone" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="mv-contact__field">
+          <textarea class="mv-contact__textarea" [(ngModel)]="message" placeholder="Votre message *" aria-label="Message" rows="5"></textarea>
+        </div>
+        <p class="mv-contact__hint" *ngIf="email && !validEmail">Veuillez saisir une adresse e-mail valide.</p>
+        <button class="mv-contact__btn" (click)="send()" [disabled]="!valid">
+          Envoyer le message
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="sent">
+        <div class="mv-contact__success">
+          <div class="mv-contact__success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h4>Message envoyé !</h4>
+          <p>Merci pour votre prise de contact. Notre équipe vous répondra très rapidement.</p>
+          <button class="mv-contact__btn mv-contact__btn--outline" (click)="reset()">Envoyer un autre message</button>
+        </div>
+      </ng-container>
+    </div>
+
+  </div>
+
+</section>

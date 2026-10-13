@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main { flex: 1; }
+
+.skip {
+  position: absolute;
+  left: -999px;
+  top: .5rem;
+  z-index: 300;
+  padding: .5rem .9rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: .5rem;
+  text-decoration: none;
+  &:focus { left: .5rem; }
+}
+
+.footer {
+  padding: 1.25rem 1rem 1.75rem;
+  text-align: center;
+  font-size: .78rem;
+  color: var(--muted);
+
+  a { color: var(--primary); font-weight: 600; text-decoration: none; &:hover { text-decoration: underline; } }
+}

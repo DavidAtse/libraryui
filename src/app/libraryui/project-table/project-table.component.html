@@ -1,0 +1,189 @@
+<!-- Composant LibraryUI : Table (ship-table) – adapté aux projets Taskly -->
+<div class="st__wrapper">
+
+  <!--  Toolbar  -->
+  <div class="st__toolbar">
+    <div class="st__search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input #searchInput type="text" [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)" placeholder="Rechercher" aria-label="Rechercher un projet" />
+    </div>
+
+    <label class="st__filter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+      </svg>
+      <span class="sr-only">Filtrer par statut</span>
+      <select [ngModel]="statusFilter()" (ngModelChange)="onFilter($event)" aria-label="Filtrer par statut">
+        <option value="ALL">Tous les statuts</option>
+        <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+      </select>
+      <svg class="st__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </label>
+
+    <button *ngIf="selectedCount() > 0" class="st__bulk-btn" (click)="deleteSelected()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      Supprimer ({{ selectedCount() }})
+    </button>
+
+    <button class="st__add-btn" (click)="addProject()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Ajouter un projet
+    </button>
+  </div>
+
+  <!--  Table  -->
+  <div class="st__table-wrap">
+    <table class="st__table">
+      <thead>
+        <tr>
+          <th class="st__th-check">
+            <input type="checkbox" [checked]="allSelected()" (change)="toggleAll()" aria-label="Sélectionner tous les projets de cette page" />
+          </th>
+          <th [attr.aria-sort]="ariaSort('name')">
+            <button type="button" class="st__th-label st__th-btn" (click)="sortBy('name')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              Nom <span class="st__sort" aria-hidden="true">{{ sortIcon('name') }}</span>
+            </button>
+          </th>
+          <th>
+            <span class="st__th-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+              </svg>
+              Référence
+            </span>
+          </th>
+          <th class="st__hide-md" [attr.aria-sort]="ariaSort('startDate')">
+            <button type="button" class="st__th-label st__th-btn" (click)="sortBy('startDate')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              Début <span class="st__sort" aria-hidden="true">{{ sortIcon('startDate') }}</span>
+            </button>
+          </th>
+          <th [attr.aria-sort]="ariaSort('dueDate')">
+            <button type="button" class="st__th-label st__th-btn" (click)="sortBy('dueDate')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              Échéance <span class="st__sort" aria-hidden="true">{{ sortIcon('dueDate') }}</span>
+            </button>
+          </th>
+          <th [attr.aria-sort]="ariaSort('progress')">
+            <button type="button" class="st__th-label st__th-btn" (click)="sortBy('progress')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+              Avancement <span class="st__sort" aria-hidden="true">{{ sortIcon('progress') }}</span>
+            </button>
+          </th>
+          <th>
+            <span class="st__th-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Statut
+            </span>
+          </th>
+          <th>
+            <span class="st__th-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              Actions
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pageItems(); trackBy: trackById" [class.st__row--selected]="isSelected(p.id)">
+          <td class="st__td-check">
+            <input type="checkbox" [checked]="isSelected(p.id)" (change)="toggleOne(p.id)" [attr.aria-label]="'Sélectionner ' + p.name" />
+          </td>
+          <td class="st__td-name">
+            {{ p.name }}
+            <span class="st__owner">{{ p.owner }} · {{ p.team }}</span>
+          </td>
+          <td class="st__td-id">{{ p.code }}</td>
+          <td class="st__td-date st__hide-md">{{ p.startDate | date: 'd MMM y' }}</td>
+          <td class="st__td-date" [class.st__td-date--late]="isLate(p)">{{ p.dueDate | date: 'd MMM y' }}</td>
+          <td class="st__td-progress">
+            <div class="st__progress" role="progressbar" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Avancement de ' + p.name">
+              <div class="st__progress-bar" [ngClass]="'st__progress-bar--' + statusKey(p.status)" [style.width.%]="p.progress"></div>
+            </div>
+            <span class="st__progress-value">{{ p.progress }}%</span>
+          </td>
+          <td class="st__td-status">
+            <span class="st__badge" [ngClass]="{
+              'st__badge--approved':  p.status === 'Terminé',
+              'st__badge--pending':   p.status === 'En cours',
+              'st__badge--canceled':  p.status === 'En retard'
+            }">{{ p.status }}</span>
+          </td>
+          <td class="st__td-action">
+            <button class="st__action-btn" (click)="editProject(p)" title="Modifier" [attr.aria-label]="'Modifier ' + p.name">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            <button class="st__action-btn st__action-btn--delete" (click)="deleteProject(p)" title="Supprimer" [attr.aria-label]="'Supprimer ' + p.name">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="pageItems().length === 0" class="st__empty-row">
+          <td colspan="8">
+            <div class="st__empty">
+              <strong>Aucun projet trouvé</strong>
+              <span>Essayez une autre recherche, changez le filtre ou créez un nouveau projet.</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--  Footer / Pagination  -->
+  <div class="st__footer">
+    <span class="st__showing">Affichage de {{ rangeStart() }} à {{ rangeEnd() }} sur {{ totalItems() }}</span>
+
+    <div class="st__pagination">
+      <button class="st__page-btn st__page-btn--nav" (click)="prevPage()" [disabled]="currentPage() === 1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span class="st__nav-label">Précédent</span>
+      </button>
+
+      <ng-container *ngFor="let p of pageNumbers()">
+        <button *ngIf="p !== '...'" class="st__page-btn"
+          [class.st__page-btn--active]="p === currentPage()"
+          [attr.aria-current]="p === currentPage() ? 'page' : null"
+          (click)="goToPage(p)">{{ p }}</button>
+        <span *ngIf="p === '...'" class="st__page-dots">…</span>
+      </ng-container>
+
+      <button class="st__page-btn st__page-btn--nav" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+        <span class="st__nav-label">Suivant</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>
