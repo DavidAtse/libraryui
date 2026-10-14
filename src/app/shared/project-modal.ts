@@ -84,17 +84,18 @@ const iso = (offsetDays = 0) => new Date(Date.now() + offsetDays * 86_400_000).t
   `,
   styles: `
     .backdrop {
-      position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 1rem;
-      background: rgba(10, 11, 23, .55); backdrop-filter: blur(3px); animation: fade .18s ease both;
+      position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+      padding: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
+      background: rgba(10, 11, 23, .65); backdrop-filter: blur(4px); animation: fade .18s ease both;
     }
     .dialog {
-      width: min(560px, 100%); max-height: calc(100vh - 2rem); overflow: auto;
+      width: min(560px, 100%); max-height: calc(100vh - 1.5rem); max-height: calc(100dvh - 1.5rem); overflow: auto;
       background: var(--surface); color: var(--text); border: 1px solid var(--border);
       border-radius: 1rem; box-shadow: var(--shadow-lg); animation: pop .22s ease both;
     }
     .dialog__head { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--border); }
     .dialog__head h2 { font-size: 1.1rem; font-weight: 800; }
-    .dialog__close { border: none; background: none; color: var(--muted); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: grid; place-items: center; }
+    .dialog__close { border: none; background: none; color: var(--muted); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: grid; place-items: center; touch-action: manipulation; }
     .dialog__close:hover { background: var(--surface-2); color: var(--text); }
     .dialog__body { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.4rem; }
     .dialog__foot { display: flex; justify-content: flex-end; gap: .6rem; padding: 1rem 1.4rem; border-top: 1px solid var(--border); background: var(--surface-2); border-radius: 0 0 1rem 1rem; }
@@ -111,7 +112,15 @@ const iso = (offsetDays = 0) => new Date(Date.now() + offsetDays * 86_400_000).t
     .field input[type='range'] { accent-color: var(--primary); width: 100%; margin-top: .5rem; }
     @keyframes fade { from { opacity: 0; } }
     @keyframes pop { from { opacity: 0; transform: translateY(12px) scale(.98); } }
-    @media (max-width: 520px) { .dialog__body { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) {
+      .dialog__head { padding: 0.95rem 1rem; }
+      .dialog__body { grid-template-columns: 1fr; gap: 0.75rem; padding: 1rem; }
+      .dialog__foot {
+        padding: 0.85rem 1rem;
+        flex-direction: column-reverse;
+        button { width: 100%; min-height: 42px; }
+      }
+    }
   `,
 })
 export class ProjectModal {

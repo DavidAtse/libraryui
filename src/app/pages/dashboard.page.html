@@ -90,10 +90,12 @@
             <strong>{{ p.name }}</strong>
             <span>{{ p.owner }} · {{ p.team }}</span>
           </div>
-          <div class="deadlines__progress" role="progressbar" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="p.name + ' progress'">
-            <div [style.width.%]="p.progress" [class.is-late]="p.status === 'En retard'"></div>
+          <div class="deadlines__progress-col">
+            <div class="deadlines__progress" role="progressbar" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="p.name + ' progress'">
+              <div [style.width.%]="p.progress" [class.is-late]="p.status === 'En retard'"></div>
+            </div>
+            <span class="deadlines__pct">{{ p.progress }}%</span>
           </div>
-          <span class="deadlines__pct">{{ p.progress }}%</span>
           <span class="due" [class.due--late]="daysLeft(p.dueDate) < 0" [class.due--soon]="daysLeft(p.dueDate) >= 0 && daysLeft(p.dueDate) <= 7">
             {{ p.dueDate | date: 'd MMM' }} · {{ dueLabel(p.dueDate) }}
           </span>

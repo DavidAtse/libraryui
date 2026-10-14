@@ -17,21 +17,40 @@ import { ToastService } from '../core/toast.service';
     </div>
   `,
   styles: `
-    .toaster { position: fixed; right: 1rem; bottom: 1rem; z-index: 200; display: flex; flex-direction: column; gap: .5rem; width: min(380px, calc(100vw - 2rem)); }
+    .toaster {
+      position: fixed;
+      right: max(1rem, env(safe-area-inset-right));
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      width: min(380px, calc(100vw - 2rem));
+      pointer-events: none;
+    }
     .toast {
       display: flex; align-items: center; gap: .65rem; padding: .75rem .9rem;
       background: var(--surface); color: var(--text); border: 1px solid var(--border);
       border-left: 4px solid var(--success); border-radius: .65rem; box-shadow: var(--shadow-lg);
       font-size: .85rem; animation: in .25s ease both;
+      pointer-events: auto;
     }
     .toast--danger { border-left-color: var(--danger); }
     .toast--info { border-left-color: var(--primary); }
     .toast__dot { display: none; }
-    .toast__msg { flex: 1; }
+    .toast__msg { flex: 1; word-break: break-word; }
     .toast__action { border: none; background: none; color: var(--primary); font: inherit; font-weight: 700; cursor: pointer; padding: .2rem .4rem; border-radius: .35rem; }
     .toast__action:hover { background: var(--primary-soft); }
-    .toast__close { border: none; background: none; color: var(--muted); font-size: 1.2rem; line-height: 1; cursor: pointer; }
+    .toast__close { border: none; background: none; color: var(--muted); font-size: 1.2rem; line-height: 1; cursor: pointer; padding: 0.2rem; }
     @keyframes in { from { opacity: 0; transform: translateX(16px); } }
+    @media (max-width: 480px) {
+      .toaster {
+        left: max(0.75rem, env(safe-area-inset-left));
+        right: max(0.75rem, env(safe-area-inset-right));
+        bottom: max(0.75rem, env(safe-area-inset-bottom));
+        width: auto;
+      }
+    }
   `,
 })
 export class Toaster {

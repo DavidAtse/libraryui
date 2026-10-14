@@ -56,6 +56,11 @@ import { Component, computed, effect, input, signal, untracked } from '@angular/
     .card__spark { width: 96px; height: 30px; flex-shrink: 0; overflow: visible; }
     .card__line { fill: none; stroke: var(--tone); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
     .card__area { fill: var(--tone-soft); stroke: none; }
+    @media (max-width: 480px) {
+      .card { padding: 0.95rem 1rem 0.85rem; }
+      .card__value { font-size: 1.75rem; margin: 0.65rem 0 0.25rem; }
+      .card__spark { width: 78px; height: 26px; }
+    }
   `,
 })
 export class StatCard {

@@ -2,18 +2,29 @@
   Composant LibraryUI : Navbar 9 (Angular) – https://www.libraryui.com
   Adapté pour Taskly : liens de routage, barre de filtre par équipe, bascule de thème, action « nouveau projet ».
 -->
-<!-- Navigation principale blanche -->
 <nav class="nb9" aria-label="Navigation principale">
-  <a routerLink="/dashboard" class="nb9__brand" aria-label="Accueil Taskly" (click)="menuOpen = false">
-    <span class="nb9__logo-icon">
-      <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="var(--primary)"/><text x="6" y="21.5" font-size="13" font-family="Arial" font-weight="900" fill="#fff">TK</text></svg>
-    </span>
-    <span class="nb9__brand-text"><strong>TASK</strong>LY</span>
-  </a>
+  <div class="nb9__header-row">
+    <a routerLink="/dashboard" class="nb9__brand" aria-label="Accueil Taskly" (click)="menuOpen = false">
+      <span class="nb9__logo-icon">
+        <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="var(--primary)"/><text x="6" y="21.5" font-size="13" font-family="Arial" font-weight="900" fill="#fff">TK</text></svg>
+      </span>
+      <span class="nb9__brand-text"><strong>TASK</strong>LY</span>
+    </a>
 
-  <button class="nb9__hamburger" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-label="Ouvrir ou fermer le menu">
-    <span></span><span></span><span></span>
-  </button>
+    <div class="nb9__actions">
+      <button class="nb9__search-btn" aria-label="Rechercher un projet" title="Rechercher un projet" (click)="goSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="nb9__search-btn" [attr.aria-label]="theme.theme() === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'"
+              [title]="theme.theme() === 'dark' ? 'Mode clair' : 'Mode sombre'" (click)="theme.toggle()">
+        <svg *ngIf="theme.theme() === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg *ngIf="theme.theme() === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="nb9__hamburger" [class.nb9__hamburger--open]="menuOpen" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-label="Ouvrir ou fermer le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
 
   <ul class="nb9__nav" [class.nb9__nav--open]="menuOpen">
     <li *ngFor="let link of mainLinks">
@@ -23,31 +34,23 @@
       </a>
     </li>
   </ul>
-
-  <div class="nb9__actions">
-    <button class="nb9__search-btn" aria-label="Rechercher un projet" title="Rechercher un projet" (click)="goSearch()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>
-    <button class="nb9__search-btn" [attr.aria-label]="theme.theme() === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'"
-            [title]="theme.theme() === 'dark' ? 'Mode clair' : 'Mode sombre'" (click)="theme.toggle()">
-      <svg *ngIf="theme.theme() === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg *ngIf="theme.theme() === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    </button>
-  </div>
 </nav>
 
 <!-- Barre de catégories sombre (filtre par équipe) -->
 <div class="nb9__catbar" *ngIf="showStrip()" role="tablist" aria-label="Filtrer par équipe">
-  <a *ngFor="let cat of categories"
-     href="#"
-     role="tab"
-     class="nb9__cat-link"
-     [attr.aria-selected]="activeCategory === cat.label"
-     [class.nb9__cat-link--active]="activeCategory === cat.label"
-     (click)="$event.preventDefault(); setCategoryActive(cat.label)">
-    {{ cat.label }}
-  </a>
+  <div class="nb9__cat-scroll">
+    <a *ngFor="let cat of categories"
+       href="#"
+       role="tab"
+       class="nb9__cat-link"
+       [attr.aria-selected]="activeCategory === cat.label"
+       [class.nb9__cat-link--active]="activeCategory === cat.label"
+       (click)="$event.preventDefault(); setCategoryActive(cat.label)">
+      {{ cat.label }}
+    </a>
+  </div>
   <a href="#" class="nb9__cat-cart" title="Nouveau projet" aria-label="Nouveau projet" (click)="$event.preventDefault(); newProject()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span class="nb9__cat-cart-label">Nouveau</span>
   </a>
 </div>
