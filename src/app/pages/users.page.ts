@@ -134,7 +134,7 @@ export class UsersPage {
     {
       name: 'Sarah K.',
       role: 'Développeuse Frontend Senior',
-      email: 'sarah.k@libraryui.com',
+      email: 'sarah.k@taskly.app',
       team: 'INGÉNIERIE',
       projects: 6,
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face',

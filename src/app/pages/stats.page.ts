@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
       <header class="page-header">
         <div>
           <h1>Statistiques & Analytique</h1>
-          <p>Indicateurs de performance détaillés de votre espace LibraryUI.</p>
+          <p>Indicateurs de performance détaillés de votre espace Taskly.</p>
         </div>
       </header>
 

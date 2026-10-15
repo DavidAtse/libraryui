@@ -1,8 +1,8 @@
-# LibraryUI Challenge – Tableau de bord SaaS & Gestion de projets
+# Taskly – Tableau de bord SaaS & Gestion de projets
 
-![Aperçu du Dashboard LibraryUI](screenshots/capture.png)
+![Aperçu du Dashboard Taskly](screenshots/capture.png)
 
-Interface moderne, intuitive et 100% responsive développée avec **Angular** pour le **LibraryUI Challenge**.
+**Taskly** est une interface moderne, intuitive et 100% responsive développée avec **Angular** pour le **LibraryUI Challenge**.
 Elle reproduit fidèlement la maquette officielle du défi (sidebar sombre, indicateurs clés, graphique d'activité avec infobulle interactive, diagramme de répartition, liste des projets récents et membres d'équipe) tout en intégrant et valorisant 4 composants phares de **LibraryUI**.
 
 - **Démo en ligne** : [https://davidatse.github.io/libraryui/](https://davidatse.github.io/libraryui/)
