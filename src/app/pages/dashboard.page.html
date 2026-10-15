@@ -1,109 +1,211 @@
-<section class="page">
-  <header class="page-header">
-    <div>
-      <h1>{{ greeting }}, John 👋</h1>
-      <p>{{ todayLabel | date: 'd MMMM y' }} · Voici l'état d'avancement pour <strong>{{ service.team() }}</strong>.</p>
+<div class="dash">
+
+  <!-- ROW 1 : 3 KPI STAT CARDS -->
+  <section class="kpi-grid" aria-label="Indicateurs clés">
+    <div class="kpi-card" *ngFor="let kpi of kpis">
+      <div class="kpi-card__icon-box" [style.background-color]="kpi.color">
+        <!-- Projets icon -->
+        <svg *ngIf="kpi.icon === 'projects'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="9" y1="21" x2="9" y2="9"/>
+        </svg>
+
+        <!-- Utilisateurs icon -->
+        <svg *ngIf="kpi.icon === 'users'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+
+        <!-- Satisfaction icon -->
+        <svg *ngIf="kpi.icon === 'satisfaction'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+          <line x1="9" y1="9" x2="9.01" y2="9"/>
+          <line x1="15" y1="9" x2="15.01" y2="9"/>
+        </svg>
+      </div>
+
+      <div class="kpi-card__info">
+        <div class="kpi-card__value">{{ kpi.value }}</div>
+        <div class="kpi-card__label">{{ kpi.label }}</div>
+      </div>
     </div>
-    <button class="btn btn--primary" (click)="service.openCreate()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Nouveau projet
-    </button>
-  </header>
+  </section>
 
-  <!-- KPI cards -->
-  <div class="kpis">
-    <app-stat-card label="Projets au total" [value]="stats().total" hint="Pour l'équipe sélectionnée" [spark]="[4,6,5,8,7,10,9]">
-      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-    </app-stat-card>
-    <app-stat-card label="En cours" tone="warning" [value]="stats().active" hint="Travaux actuellement en cours" [spark]="[3,5,4,6,6,5,7]">
-      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    </app-stat-card>
-    <app-stat-card label="Terminés" tone="success" [value]="stats().completed" hint="Livrés avec succès" [spark]="[1,2,2,3,4,4,6]">
-      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    </app-stat-card>
-    <app-stat-card label="En retard" tone="danger" [value]="stats().delayed" hint="Nécessitent une attention" [spark]="[5,4,5,3,4,3,3]">
-      <svg icon viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    </app-stat-card>
-  </div>
-
-  <div class="grid">
-    <!-- Weekly activity -->
-    <article class="panel panel--wide">
-      <header class="panel__head">
-        <div>
-          <h2>Activité hebdomadaire</h2>
-          <p>{{ weekTotal() }} tâches terminées cette semaine</p>
-        </div>
-        <span class="chip">Progression moyenne : {{ stats().avgProgress }}%</span>
+  <!-- ROW 2 : CHARTS (Activité récente & Répartition) -->
+  <section class="chart-grid">
+    <!-- Activité récente -->
+    <article class="card activity-card">
+      <header class="card__header">
+        <h2 class="card__title">Activité récente</h2>
       </header>
-      <div class="bars" role="img" [attr.aria-label]="'Tâches terminées par jour : ' + weekTotal() + ' cette semaine'">
-        <div class="bars__col" *ngFor="let d of week(); let i = index">
-          <span class="bars__value">{{ d.value }}</span>
-          <div class="bars__track">
-            <div class="bars__bar" [style.height.%]="d.height" [style.animation-delay.ms]="i * 60"></div>
-          </div>
-          <span class="bars__day">{{ d.day }}</span>
+
+      <div class="activity-chart">
+        <svg class="activity-svg" viewBox="0 0 650 250" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#10b981" stop-opacity="0.32" />
+              <stop offset="60%" stop-color="#10b981" stop-opacity="0.08" />
+              <stop offset="100%" stop-color="#10b981" stop-opacity="0.0" />
+            </linearGradient>
+            <!-- Drop shadow for floating tooltip -->
+            <filter id="tooltipShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.25"/>
+            </filter>
+          </defs>
+
+          <!-- Area beneath spline curve -->
+          <path class="area-fill" fill="url(#curveGradient)"
+            d="M 40 170
+               C 85 170, 95 190, 135 190
+               C 175 190, 195 145, 235 145
+               C 275 145, 285 165, 325 165
+               C 365 165, 385 75, 420 75
+               C 455 75, 475 150, 515 150
+               C 555 150, 570 110, 610 110
+               L 610 220 L 40 220 Z" />
+
+          <!-- Spline Line -->
+          <path class="curve-line"
+            d="M 40 170
+               C 85 170, 95 190, 135 190
+               C 175 190, 195 145, 235 145
+               C 275 145, 285 165, 325 165
+               C 365 165, 385 75, 420 75
+               C 455 75, 475 150, 515 150
+               C 555 150, 570 110, 610 110"
+            fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Mai peak point -->
+          <circle cx="420" cy="75" r="5" fill="#10b981" stroke="#ffffff" stroke-width="2.5" />
+
+          <!-- Floating Tooltip (+24%) directly over Mai peak -->
+          <g class="tooltip-badge" filter="url(#tooltipShadow)">
+            <!-- Pill rect -->
+            <rect x="391" y="24" width="58" height="26" rx="6" fill="#0f172a" />
+            <!-- Caret pointing down -->
+            <polygon points="415,50 425,50 420,55" fill="#0f172a" />
+            <!-- Text +24% -->
+            <text x="420" y="42" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle" font-family="'Inter', sans-serif">+24%</text>
+          </g>
+        </svg>
+
+        <!-- X Axis Month Labels -->
+        <div class="axis-months">
+          <span>Jan</span>
+          <span>Fév</span>
+          <span>Mar</span>
+          <span>Avr</span>
+          <span>Mai</span>
+          <span>Juin</span>
+          <span>Juil</span>
         </div>
       </div>
     </article>
 
-    <!-- Status breakdown -->
-    <article class="panel">
-      <header class="panel__head">
-        <div>
-          <h2>Répartition par statut</h2>
-          <p>{{ stats().total }} projets au total</p>
-        </div>
+    <!-- Répartition (Donut) -->
+    <article class="card donut-card">
+      <header class="card__header">
+        <h2 class="card__title">Répartition</h2>
       </header>
-      <div class="donut">
-        <svg viewBox="0 0 36 36" class="donut__chart" role="img" aria-label="Répartition des statuts de projet">
-          <circle cx="18" cy="18" r="15.915" class="donut__ring" />
-          <ng-container *ngFor="let s of donut()">
-            <circle *ngIf="s.value > 0" cx="18" cy="18" r="15.915" class="donut__seg"
-                    [attr.stroke]="s.color" [attr.stroke-dasharray]="s.dash" [attr.stroke-dashoffset]="s.offset" />
-          </ng-container>
-          <text x="18" y="19.5" class="donut__total">{{ stats().total }}</text>
-        </svg>
-        <ul class="legend">
-          <li *ngFor="let s of donut()">
-            <span class="legend__dot" [style.background]="s.color"></span>
-            <span class="legend__label">{{ s.label }}</span>
-            <strong>{{ s.value }}</strong>
-            <span class="legend__pct">{{ s.pct }}%</span>
+
+      <div class="donut-content">
+        <div class="donut-chart-wrap">
+          <svg class="donut-svg" viewBox="0 0 160 160">
+            <!-- Background base ring -->
+            <circle cx="80" cy="80" r="58" fill="none" stroke="#f1f5f9" stroke-width="20" />
+
+            <!-- Colored segments -->
+            <circle *ngFor="let seg of donutSegments"
+              cx="80" cy="80" r="58"
+              fill="none"
+              [attr.stroke]="seg.color"
+              stroke-width="20"
+              [attr.stroke-dasharray]="seg.dashArray"
+              [attr.stroke-dashoffset]="seg.offset"
+              transform="rotate(-90 80 80)" />
+          </svg>
+        </div>
+
+        <!-- Legend matching mockup -->
+        <ul class="donut-legend">
+          <li *ngFor="let item of donutData" class="donut-legend__item">
+            <span class="donut-legend__dot" [style.background-color]="item.color"></span>
+            <span class="donut-legend__label">{{ item.label }}</span>
+            <span class="donut-legend__pct">{{ item.pct }}%</span>
           </li>
         </ul>
       </div>
     </article>
+  </section>
 
-    <!-- Upcoming deadlines -->
-    <article class="panel panel--full">
-      <header class="panel__head">
-        <div>
-          <h2>Prochaines échéances</h2>
-          <p>Les 5 projets les plus urgents</p>
-        </div>
-        <a routerLink="/projects" class="link">Voir tous les projets →</a>
+  <!-- ROW 3 : LISTS (Projets récents & Membres) -->
+  <section class="lists-grid">
+    <!-- Projets récents -->
+    <article class="card">
+      <header class="card__header">
+        <h2 class="card__title">Projets récents</h2>
       </header>
-      <ul class="deadlines" *ngIf="upcoming().length; else empty">
-        <li *ngFor="let p of upcoming()">
-          <div class="deadlines__main">
-            <strong>{{ p.name }}</strong>
-            <span>{{ p.owner }} · {{ p.team }}</span>
+
+      <ul class="projects-list">
+        <li *ngFor="let p of recentProjects" class="project-row" routerLink="/projects" role="button" tabindex="0">
+          <div class="project-row__icon-box" [style.background-color]="p.color">
+            <!-- E-learning / book -->
+            <svg *ngIf="p.icon === 'book'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+
+            <!-- Mobile app -->
+            <svg *ngIf="p.icon === 'mobile'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+
+            <!-- Dashboard analytics -->
+            <svg *ngIf="p.icon === 'chart'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
           </div>
-          <div class="deadlines__progress-col">
-            <div class="deadlines__progress" role="progressbar" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="p.name + ' progress'">
-              <div [style.width.%]="p.progress" [class.is-late]="p.status === 'En retard'"></div>
-            </div>
-            <span class="deadlines__pct">{{ p.progress }}%</span>
+
+          <div class="project-row__info">
+            <h3 class="project-row__name">{{ p.title }}</h3>
+            <span class="project-row__time">{{ p.time }}</span>
           </div>
-          <span class="due" [class.due--late]="daysLeft(p.dueDate) < 0" [class.due--soon]="daysLeft(p.dueDate) >= 0 && daysLeft(p.dueDate) <= 7">
-            {{ p.dueDate | date: 'd MMM' }} · {{ dueLabel(p.dueDate) }}
+
+          <span class="badge" [ngClass]="p.badgeType === 'success' ? 'badge--success' : 'badge--info'">
+            {{ p.badge }}
           </span>
         </li>
       </ul>
-      <ng-template #empty>
-        <p class="empty">Aucune échéance en attente. Tout est livré ! 🎉</p>
-      </ng-template>
     </article>
-  </div>
-</section>
+
+    <!-- Membres -->
+    <article class="card">
+      <header class="card__header">
+        <h2 class="card__title">Membres</h2>
+      </header>
+
+      <ul class="members-list">
+        <li *ngFor="let m of members" class="member-row" routerLink="/users" role="button" tabindex="0">
+          <div class="member-row__avatar-wrap">
+            <img [src]="m.avatar" [alt]="m.name" class="member-row__avatar" loading="lazy" />
+          </div>
+
+          <div class="member-row__info">
+            <h3 class="member-row__name">{{ m.name }}</h3>
+            <span class="member-row__role">{{ m.role }}</span>
+          </div>
+
+          <span class="status-dot" [class.status-dot--online]="m.status === 'online'" aria-label="En ligne"></span>
+        </li>
+      </ul>
+    </article>
+  </section>
+
+</div>

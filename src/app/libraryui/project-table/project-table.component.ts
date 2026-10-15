@@ -33,6 +33,10 @@ export class ProjectTable {
   private readonly selectedIds = signal<Set<number>>(new Set());
 
   constructor() {
+    const q = this.route.snapshot.queryParamMap.get('q');
+    if (q) {
+      this.searchTerm.set(q);
+    }
     if (this.route.snapshot.queryParamMap.get('focus') === 'search') {
       setTimeout(() => this.searchInput()?.nativeElement.focus());
     }

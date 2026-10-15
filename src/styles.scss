@@ -3,7 +3,7 @@
    One single palette shared by every LibraryUI component (light + dark).
    ========================================================================== */
 :root {
-  --bg: #f4f5fb;
+  --bg: #f3f4f6;
   --surface: #ffffff;
   --surface-2: #f9fafb;
   --border: #e5e7eb;
@@ -12,28 +12,32 @@
   --muted: #6b7280;
   --faint: #9ca3af;
 
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-soft: rgba(79, 70, 229, 0.1);
-  --primary-ring: rgba(79, 70, 229, 0.22);
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-soft: rgba(16, 185, 129, 0.12);
+  --primary-ring: rgba(16, 185, 129, 0.25);
   --on-primary: #ffffff;
-  --strip: #1e1b4b;
-  --strip-text: #c7d2fe;
+  --sidebar-bg: #111827;
+  --sidebar-active: #1f2937;
+  --sidebar-text: #9ca3af;
+  --sidebar-text-hover: #ffffff;
+  --strip: #111827;
+  --strip-text: #9ca3af;
 
-  --success: #16a34a;
-  --success-soft: #f0fdf4;
-  --success-border: #bbf7d0;
-  --warning: #d97706;
+  --success: #10b981;
+  --success-soft: #ecfdf5;
+  --success-border: #a7f3d0;
+  --warning: #f59e0b;
   --warning-soft: #fffbeb;
   --warning-border: #fde68a;
-  --danger: #dc2626;
+  --danger: #ef4444;
   --danger-soft: #fef2f2;
   --danger-border: #fecaca;
 
-  --radius: 0.75rem;
-  --radius-sm: 0.5rem;
-  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.05);
-  --shadow-lg: 0 20px 45px rgba(16, 24, 40, 0.18);
+  --radius: 1rem;
+  --radius-sm: 0.625rem;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 12px 30px -4px rgba(0, 0, 0, 0.12);
   --ease: 0.2s ease;
   color-scheme: light;
 }

@@ -2,14 +2,14 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>Taskly – Tableau de bord de suivi de projets</title>
+    <title>LibraryUI – Tableau de bord de suivi de projets</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta
       name="description"
-      content="Taskly, un tableau de bord de suivi et de gestion de projets moderne et responsive conçu avec Angular et les composants LibraryUI."
+      content="LibraryUI, tableau de bord de suivi et de gestion de projets moderne et responsive conçu avec Angular et les composants LibraryUI."
     />
-    <meta name="theme-color" content="#4f46e5" />
+    <meta name="theme-color" content="#10b981" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +22,7 @@
         try {
           var t = localStorage.getItem('taskly.theme');
           if (!t) {
-            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            t = 'light';
           }
           document.documentElement.setAttribute('data-theme', t);
         } catch (e) {}
