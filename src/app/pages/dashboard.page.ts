@@ -105,19 +105,19 @@ export class DashboardPage {
     {
       name: 'Sarah K.',
       role: 'Développeuse',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face',
+      avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23f43f5e"/><circle cx="50" cy="40" r="20" fill="%23fbcfe8"/><path d="M26 38c0-12 10-20 24-20s24 8 24 20c0 4-2 8-5 10-1-8-7-14-19-14s-18 6-19 14c-3-2-5-6-5-10z" fill="%234c0519"/><path d="M18 95c0-18 15-30 32-30s32 12 32 30" fill="%23be123c"/><circle cx="43" cy="39" r="2.5" fill="%234c0519"/><circle cx="57" cy="39" r="2.5" fill="%234c0519"/><path d="M45 46c3 2 7 2 10 0" stroke="%234c0519" stroke-width="2" stroke-linecap="round" fill="none"/></svg>',
       status: 'online'
     },
     {
       name: 'Thomas B.',
       role: 'Designer',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face',
+      avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%230284c7"/><circle cx="50" cy="40" r="20" fill="%23ffedd5"/><path d="M30 30c0-10 9-16 20-16s20 6 20 16c-4-4-10-6-20-6s-16 2-20 6z" fill="%231e293b"/><path d="M18 95c0-18 15-30 32-30s32 12 32 30" fill="%230369a1"/><circle cx="43" cy="39" r="2.5" fill="%230f172a"/><circle cx="57" cy="39" r="2.5" fill="%230f172a"/><path d="M46 46c2 2 6 2 8 0" stroke="%230f172a" stroke-width="2" stroke-linecap="round" fill="none"/></svg>',
       status: 'online'
     },
     {
       name: 'Awa N.',
       role: 'Product Manager',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=face',
+      avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23eab308"/><circle cx="50" cy="40" r="20" fill="%23fed7aa"/><path d="M26 42c-2-12 8-24 24-24s26 12 24 24c-3-6-10-9-24-9s-21 3-24 9z" fill="%231c1917"/><path d="M18 95c0-18 15-30 32-30s32 12 32 30" fill="%23a16207"/><circle cx="43" cy="39" r="2.5" fill="%23451a03"/><circle cx="57" cy="39" r="2.5" fill="%23451a03"/><path d="M45 46c3 2 7 2 10 0" stroke="%23451a03" stroke-width="2" stroke-linecap="round" fill="none"/></svg>',
       status: 'online'
     }
   ];
